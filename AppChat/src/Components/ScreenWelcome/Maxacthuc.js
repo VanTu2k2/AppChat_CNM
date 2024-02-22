@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
   } from "react-native";
 
-  const KichhoatTK = () => {
+  const Maxacthuc = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const { phoneNumber } = route.params;
@@ -24,6 +24,7 @@ import {
     const [inputValue2, setInputValue2] = useState("");
     const [inputValue3, setInputValue3] = useState("");
     const [inputValue4, setInputValue4] = useState("");
+
     useEffect(() => {
       // Bắt đầu đếm ngược
       const interval = setInterval(() => {
@@ -35,9 +36,16 @@ import {
       return () => clearInterval(interval);
     }, []);
 
+    const handleNext = () => {
+        // Đóng modal trước khi điều hướng
+        // toggleModal();
+        // Điều hướng sang trang khác khi xác nhận
+        navigation.navigate('XacthucMK', { phoneNumber: phoneNumber });
+    };
+
     const handleTextChange1 = (text) => {
-      const formattedText = text.replace(/[^0-9]/g, "");
-      setInputValue1(formattedText);
+        const formattedText = text.replace(/[^0-9]/g, "");
+        setInputValue1(formattedText);
     };
     
     const handleTextChange2 = (text) => {
@@ -66,7 +74,7 @@ import {
                   <Icon name="chevron-back" size={25} color="white" />
               </View>
             </Pressable>
-              <Text style={styles.KichhoatTK}>Kích hoạt tài khoản</Text>
+              <Text style={styles.NhapMXT}>Nhập mã xác thực</Text>
           </View>
             
           <View style={styles.view2}>
@@ -95,28 +103,28 @@ import {
                     maxLength={1}
                     onChangeText={handleTextChange1}
                     value={inputValue1}
-                  />
-                  <TextInput
+                />
+                <TextInput
                     style={styles.input}
                     keyboardType="numeric"
                     maxLength={1}
                     onChangeText={handleTextChange2}
                     value={inputValue2}
-                  />
-                  <TextInput
+                />
+                <TextInput
                     style={styles.input}
                     keyboardType="numeric"
                     maxLength={1}
                     onChangeText={handleTextChange3}
                     value={inputValue3}
-                  />
-                  <TextInput
+                    />
+                <TextInput
                     style={styles.input}
                     keyboardType="numeric"
                     maxLength={1}
                     onChangeText={handleTextChange4}
                     value={inputValue4}
-                  />
+                />
               </View>
 
               {/* Thời gian đếm ngược */}
@@ -146,7 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#66E86B",
   },
-  KichhoatTK: {
+  NhapMXT: {
     marginLeft: 10,
     marginTop: 10,
     fontSize: 24,
@@ -242,4 +250,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-export default KichhoatTK
+export default Maxacthuc

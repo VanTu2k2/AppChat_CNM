@@ -8,6 +8,9 @@ import Dangky from "./src/Components/ScreenWelcome/Dangky";
 import Dangky2 from "./src/Components/ScreenWelcome/Dangky2";
 import KichhoatTK from "./src/Components/ScreenWelcome/KichhoatTK";
 import Quenmatkhau from "./src/Components/ScreenWelcome/Quenmatkhau";
+import Maxacthuc from "./src/Components/ScreenWelcome/Maxacthuc";
+import XacthucMK from "./src/Components/ScreenWelcome/XacthucMK";
+import TaoMK from "./src/Components/ScreenWelcome/TaoMK";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -21,6 +24,10 @@ const App = () => {
         <Stack.Screen name="Dangky2" component={Dangky2} />
         <Stack.Screen name="KichhoatTK" component={KichhoatTK} />
         <Stack.Screen name="Quenmatkhau" component={Quenmatkhau} />
+        <Stack.Screen name="Maxacthuc" component={Maxacthuc} />
+        <Stack.Screen name="XacthucMK" component={XacthucMK} />
+        <Stack.Screen name="TaoMK" component={TaoMK} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

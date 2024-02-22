@@ -25,6 +25,13 @@ const Quenmatkhau = () => {
     setIsModalVisible(!isModalVisible);
   };
 
+  const handleConfirm = () => {
+    // Đóng modal trước khi điều hướng
+    toggleModal();
+    // Điều hướng sang trang khác khi xác nhận
+    navigation.navigate('Maxacthuc', { phoneNumber: phoneNumber });
+  };
+
   const handleContinue = () => {
     // Kiểm tra số điện thoại hợp lệ trước khi mở modal
     const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
@@ -119,7 +126,7 @@ const Quenmatkhau = () => {
               }}>
               <Text style={styles.modalButtonText}>Thay đổi</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => { }}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleConfirm}>
               <Text style={styles.modalButtonText}>Xác nhận</Text>
             </TouchableOpacity>
           </View>

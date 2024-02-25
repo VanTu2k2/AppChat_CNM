@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -13,58 +13,55 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-var url = "https://65445bd25a0b4b04436c4997.mockapi.io/Loginapp";
-console.log(url);
+const url = "https://65445bd25a0b4b04436c4997.mockapi.io/Loginapp";
+
 const Login = () => {
   const navigation = useNavigation();
-  const [sdt, setSdt] = useState();
-  const [pass, setPass] = useState();
+  const [sdt, setSdt] = useState("");
+  const [pass, setPass] = useState("");
   const [state, setState] = useState([]);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setState(data);
+      });
+  }, []);
 
   const handlePasswordVisibility = () => {
     setSecureTextEntry(!secureTextEntry);
   };
 
   const handleForgotPassword = () => {
-    // Xử lý khi người dùng nhấn vào "Quên mật khẩu"
-    console.log("Quên mật khẩu");
     navigation.navigate('Quenmatkhau');
   };
 
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("====================================");
-        console.log(data);
-        console.log("====================================");
-        setState(data);
-      });
-  }, []);
-
   const handleCheck = () => {
-    const user = state.find((user) => user.sdt == sdt && user.pass == pass);
+    const user = state.find((user) => user.sdt === sdt && user.pass === pass);
     if (user) {
-      navigation.navigate("Home");
-      //navigation.navigate("Home", user);
+      showToast("Đăng nhập thành công", "success"); // Thêm tham số type là "success"
+      setTimeout(() => {
+        navigation.navigate("TinNhan");
+      }, 3000); // Chuyển hướng sau 3 giây
     } else {
-      showToast();
+      showToast("Số điện thoại hoặc mật khẩu không đúng!", "error");
       setPass("");
     }
   };
-  const showToast = (message) => {
+
+  const showToast = (message, type) => {
     Toast.show({
-      type: "error",
+      type: type,
       position: "top",
-      text1: message || "Mật khẩu hoặc số điện thoại không đúng!",
-      text2: message || "Có thể bạn chưa đăng ký tài khoản!",
-      visibilityTime: 4000,
+      text1: message,
+      visibilityTime: 3000,
       autoHide: true,
       fontFamily: "Arial",
     });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.toastContainer}>
@@ -72,39 +69,29 @@ const Login = () => {
       </View>
 
       <View style={styles.view1}>
-            <Pressable
-            onPress={() => {
-                navigation.goBack();
-            }}>
-              <View style={styles.iconback}>
-                  <Icon name="chevron-back" size={25} color="white" />
-              </View>
-            </Pressable>
-          <Text style={styles.login}>Đăng nhập</Text>
+        <Pressable onPress={() => navigation.goBack()}>
+          <View style={styles.iconback}>
+            <Icon name="chevron-back" size={25} color="white" />
+          </View>
+        </Pressable>
+        <Text style={styles.login}>Đăng nhập</Text>
       </View>
 
       <View style={styles.view2}>
-            <Text style={styles.textNote}>Vui lòng nhập số điện thoại và mật khẩu đăng nhập</Text>
+        <Text style={styles.textNote}>Vui lòng nhập số điện thoại và mật khẩu đăng nhập</Text>
       </View>
 
       <View style={styles.view3}>
         <TextInput
           style={styles.textInsdt}
-          placeholder= "Số điện thoại"
+          placeholder="Số điện thoại"
           value={sdt}
-          onChangeText={(text) => {
-            setSdt(text);
-          }}>
-        </TextInput>
+          onChangeText={(text) => setSdt(text)}
+        />
 
         <View style={styles.group1}>
           <TextInput
-            style={[
-              styles.textInPass,
-              isVisible && {
-                secureTextEntry: true,
-              },
-            ]}
+            style={[styles.textInPass, secureTextEntry && styles.secureTextEntry]}
             placeholder="Mật khẩu"
             value={pass}
             onChangeText={(text) => setPass(text)}
@@ -122,11 +109,11 @@ const Login = () => {
         </View>
 
         <View style={styles.view4}>
-          <Pressable style={styles.PreLogin} onPress={() => handleCheck()}>
+          <Pressable style={styles.PreLogin} onPress={handleCheck}>
             <Text style={styles.textLogin}>Đăng nhập</Text>
           </Pressable>
         </View>
-        
+
       </View>
 
     </View>
@@ -136,23 +123,23 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative', // Đảm bảo các phần tử con có thể sử dụng 'absolute' mà không bị hạn chế bởi parent
+    position: 'relative',
   },
   toastContainer: {
-    position: 'absolute', // Đặt vị trí tuyệt đối để thông báo hiển thị trên tất cả các phần tử khác
-    top: 0, // Hiển thị ở đỉnh của container
-    left: 0, // Hiển thị bên trái của container
-    right: 0, // Hiển thị bên phải của container
-    zIndex: 9999, // Đảm bảo thông báo hiển thị trên tất cả các phần tử khác
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
   },
   view1: {
     flexDirection: "row",
     backgroundColor: "#66E86B",
   },
-  view2:{
+  view2: {
     backgroundColor: "#D9D9D9",
   },
-  textNote:{
+  textNote: {
     fontSize: 16,
   },
   view3: {
@@ -192,13 +179,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
   },
+  secureTextEntry: {
+    secureTextEntry: true,
+  },
   visibilityIconContainer: {
     position: 'absolute',
-    right: 10, // Điều chỉnh khoảng cách nút với ô mật khẩu
+    right: 10,
     height: '100%',
     justifyContent: 'center',
   },
-  visibilityIcon:{
+  visibilityIcon: {
     fontSize: 16,
   },
   forgotPasswordContainer: {
